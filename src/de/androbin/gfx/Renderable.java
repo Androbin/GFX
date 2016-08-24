@@ -26,10 +26,14 @@ public interface Renderable
 		render( buffer_.createGraphics() );
 		
 		final Graphics g = comp.getGraphics();
-		g.drawImage( buffer_, 0, 0, comp );
 		
-		Toolkit.getDefaultToolkit().sync();
-		g.dispose();
+		if ( g != null )
+		{
+			g.drawImage( buffer_, 0, 0, comp );
+			
+			Toolkit.getDefaultToolkit().sync();
+			g.dispose();
+		}
 		
 		return buffer_;
 	}

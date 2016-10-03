@@ -15,6 +15,11 @@ public final class ImageUtil
 	
 	public static BufferedImage loadImage( final File file )
 	{
+		if ( file == null )
+		{
+			return null;
+		}
+		
 		try
 		{
 			return ImageIO.read( file );
@@ -34,9 +39,9 @@ public final class ImageUtil
 			return null;
 		}
 		
-		try ( final InputStream stream = res.openStream() )
+		try
 		{
-			return ImageIO.read( stream );
+			return ImageIO.read( res );
 		}
 		catch ( final IOException e )
 		{

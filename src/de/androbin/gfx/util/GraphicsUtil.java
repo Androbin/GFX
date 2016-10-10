@@ -55,7 +55,10 @@ public final class GraphicsUtil
 	
 	public static void drawOval( final Graphics g, final float x, final float y, final float w, final float h )
 	{
-		g.drawOval( Math.round( x - w ), Math.round( y - h ), Math.round( w * 2f ), Math.round( h * 2f ) );
+		final int px = Math.round( x - w );
+		final int py = Math.round( y - h );
+		
+		g.drawOval( px, py, Math.round( x + w ) - px, Math.round( y + h ) - py );
 	}
 	
 	public static void fill3DRect( final Graphics g, final float x, final float y, final float w, final float h, final boolean raised, final int thickness )
@@ -135,6 +138,9 @@ public final class GraphicsUtil
 	
 	public static void fillOval( final Graphics g, final float x, final float y, final float w, final float h )
 	{
-		g.fillOval( Math.round( x - w ), Math.round( y - h ), Math.round( w * 2f ), Math.round( h * 2f ) );
+		final int px = Math.round( x - w );
+		final int py = Math.round( y - h );
+		
+		g.fillOval( px, py, Math.round( x + w ) - px, Math.round( y + h ) - py );
 	}
 }

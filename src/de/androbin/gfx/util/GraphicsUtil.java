@@ -53,6 +53,19 @@ public final class GraphicsUtil
 		drawRect( g, r.x, r.y, r.width, r.height );
 	}
 	
+	public static void drawRoundRect( final Graphics g, final float x, final float y, final float w, final float h, final float aw, final float ah )
+	{
+		final int px = Math.round( x );
+		final int py = Math.round( y );
+		
+		g.drawRoundRect( px, py, Math.round( x + w ) - px, Math.round( y + h ) - py, Math.round( aw ), Math.round( ah ) );
+	}
+	
+	public static void drawRoundRect( final Graphics g, final RoundRectangle2D.Float r )
+	{
+		drawRoundRect( g, r.x, r.y, r.width, r.height, r.arcwidth, r.archeight );
+	}
+	
 	public static void drawOval( final Graphics g, final float x, final float y, final float w, final float h )
 	{
 		final int px = Math.round( x - w );

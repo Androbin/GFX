@@ -58,9 +58,9 @@ public final class ColorUtil
 	
 	public static Color interpolateColor( final Color l, final float p, final Color r )
 	{
-		final int red = Math.round( interpolate( l.getRed(), p, r.getRed() ) );
-		final int green = Math.round( interpolate( l.getGreen(), p, r.getGreen() ) );
-		final int blue = Math.round( interpolate( l.getBlue(), p, r.getBlue() ) );
+		final int red = Math.round( inter( l.getRed(), p, r.getRed() ) );
+		final int green = Math.round( inter( l.getGreen(), p, r.getGreen() ) );
+		final int blue = Math.round( inter( l.getBlue(), p, r.getBlue() ) );
 		
 		return new Color( red, green, blue );
 	}

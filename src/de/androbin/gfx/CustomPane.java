@@ -5,10 +5,9 @@ import de.androbin.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
-import java.io.*;
 import javax.swing.*;
 
-public abstract class CustomPane extends JComponent implements Renderable, Runnable, Serializable
+public abstract class CustomPane extends JComponent implements Renderable, Runnable
 {
 	private BufferedImage		buffer;
 	

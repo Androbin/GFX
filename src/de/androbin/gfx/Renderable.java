@@ -6,7 +6,9 @@ import javax.swing.*;
 
 public interface Renderable
 {
-	void render( final Graphics2D g );
+	default void render( final Graphics2D g )
+	{
+	}
 	
 	default boolean render( final JComponent comp )
 	{
@@ -30,7 +32,6 @@ public interface Renderable
 		if ( g != null )
 		{
 			g.drawImage( buffer_, 0, 0, comp );
-			
 			Toolkit.getDefaultToolkit().sync();
 			g.dispose();
 		}

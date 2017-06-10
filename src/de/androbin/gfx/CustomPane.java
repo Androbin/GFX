@@ -15,8 +15,8 @@ public abstract class CustomPane extends JComponent implements Renderable, Runna
   protected long delayMilli;
   protected int delayNano;
   
-  protected boolean active;
-  protected boolean running;
+  protected volatile boolean active;
+  protected volatile boolean running;
   
   protected boolean deadly;
   

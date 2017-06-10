@@ -17,7 +17,8 @@ public interface Renderable {
       return null;
     }
     
-    final BufferedImage buffer_ = buffer != null && buffer.getWidth() == comp.getWidth()
+    final BufferedImage buffer_ = buffer != null
+        && buffer.getWidth() == comp.getWidth()
         && buffer.getHeight() == comp.getHeight()
             ? buffer
             : new BufferedImage( comp.getWidth(), comp.getHeight(), BufferedImage.TYPE_INT_RGB );

@@ -20,21 +20,20 @@ public final class SystemGraphics {
     return configuration.getBounds().getSize();
   }
   
-  public static boolean setNimbusLookAndFeel() {
+  private static boolean setLookAndFeel( final String className ) {
     try {
-      UIManager.setLookAndFeel( "javax.swing.plaf.nimbus.NimbusLookAndFeel" );
+      UIManager.setLookAndFeel( className );
       return true;
-    } catch ( final Exception ignore ) {
+    } catch ( final ReflectiveOperationException | UnsupportedLookAndFeelException ignore ) {
       return false;
     }
   }
   
+  public static boolean setNimbusLookAndFeel() {
+    return setLookAndFeel( "javax.swing.plaf.nimbus.NimbusLookAndFeel" );
+  }
+  
   public static boolean setSystemLookAndFeel() {
-    try {
-      UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
-      return true;
-    } catch ( final Exception ignore ) {
-      return false;
-    }
+    return setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
   }
 }

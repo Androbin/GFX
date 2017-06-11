@@ -7,13 +7,16 @@ public final class GraphicsUtil {
   private GraphicsUtil() {
   }
   
+  public static void drawCircle( final Graphics g, final Point2D.Float p, final float r ) {
+    drawCircle( g, p.x, p.y, r );
+  }
+  
   public static void drawCircle( final Graphics g, final float x, final float y, final float r ) {
     drawOval( g, x, y, r, r );
   }
   
-  public static void drawImage( final Graphics g, final Image image,
-      final Rectangle2D.Float bounds ) {
-    drawImage( g, image, bounds.x, bounds.y, bounds.width, bounds.height );
+  public static void drawImage( final Graphics g, final Image image, final Point2D.Float p ) {
+    drawImage( g, image, p.x, p.y );
   }
   
   public static void drawImage( final Graphics g, final Image image,
@@ -22,6 +25,26 @@ public final class GraphicsUtil {
     final int py = Math.round( y );
     
     g.drawImage( image, px, py, null );
+  }
+  
+  public static void drawImage( final Graphics g, final Image image,
+      final Rectangle2D.Float bounds ) {
+    drawImage( g, image, bounds.x, bounds.y, bounds.width, bounds.height );
+  }
+  
+  public static void drawImage( final Graphics g, final Image image, final Point2D.Float p,
+      final Point2D.Float size ) {
+    drawImage( g, image, p.x, p.y, size.x, size.y );
+  }
+  
+  public static void drawImage( final Graphics g, final Image image, final Point2D.Float p,
+      final float width, final float height ) {
+    drawImage( g, image, p.x, p.y, width, height );
+  }
+  
+  public static void drawImage( final Graphics g, final Image image, final float x, final float y,
+      final Point2D.Float size ) {
+    drawImage( g, image, x, y, size.x, size.y );
   }
   
   public static void drawImage( final Graphics g, final Image image, final float x, final float y,
@@ -49,6 +72,20 @@ public final class GraphicsUtil {
     drawRect( g, rect.x, rect.y, rect.width, rect.height );
   }
   
+  public static void drawRect( final Graphics g, final Point2D.Float p, final Point2D.Float size ) {
+    drawRect( g, p.x, p.y, size.x, size.y );
+  }
+  
+  public static void drawRect( final Graphics g, final Point2D.Float p,
+      final float width, final float height ) {
+    drawRect( g, p.x, p.y, width, height );
+  }
+  
+  public static void drawRect( final Graphics g, final float x, final float y,
+      final Point2D.Float size ) {
+    drawRect( g, x, y, size.x, size.y );
+  }
+  
   public static void drawRect( final Graphics g, final float x, final float y,
       final float width, final float height ) {
     final int px = Math.round( x );
@@ -70,12 +107,35 @@ public final class GraphicsUtil {
         Math.round( arcWidth ), Math.round( arcHeight ) );
   }
   
+  public static void drawOval( final Graphics g, final Rectangle2D.Float rect ) {
+    drawOval( g, rect.x, rect.y, rect.width, rect.height );
+  }
+  
+  public static void drawOval( final Graphics g, final Point2D.Float p, final Point2D.Float size ) {
+    drawOval( g, p.x, p.y, size.x, size.y );
+  }
+  
+  public static void drawOval( final Graphics g, final Point2D.Float p,
+      final float width, final float height ) {
+    drawOval( g, p.x, p.y, width, height );
+  }
+  
+  public static void drawOval( final Graphics g, final float x, final float y,
+      final Point2D.Float size ) {
+    drawOval( g, x, y, size.x, size.y );
+  }
+  
   public static void drawOval( final Graphics g, final float x, final float y,
       final float width, final float height ) {
     final int px = Math.round( x - width );
     final int py = Math.round( y - height );
     
     g.drawOval( px, py, Math.round( x + width ) - px, Math.round( y + height ) - py );
+  }
+  
+  public static void fill3DRect( final Graphics g, final Rectangle2D.Float rect,
+      final boolean raised, final int thickness ) {
+    fill3DRect( g, rect.x, rect.y, rect.width, rect.height, raised, thickness );
   }
   
   public static void fill3DRect( final Graphics g, final float x, final float y,
@@ -133,12 +193,22 @@ public final class GraphicsUtil {
     fillRect( g, rect.x, rect.y, rect.width, rect.height );
   }
   
-  public static void fillRect( final Graphics g, final Point2D.Float p, final Point2D.Float s ) {
-    fillRect( g, p.x, p.y, s.x, s.y );
+  public static void fillRect( final Graphics g, final Point2D.Float p, final Point2D.Float size ) {
+    fillRect( g, p.x, p.y, size.x, size.y );
   }
   
-  public static void fillRect( final Graphics g, final float x, final float y, final float width,
-      final float height ) {
+  public static void fillRect( final Graphics g, final Point2D.Float p,
+      final float width, final float height ) {
+    fillRect( g, p.x, p.y, width, height );
+  }
+  
+  public static void fillRect( final Graphics g, final float x, final float y,
+      final Point2D.Float size ) {
+    fillRect( g, x, y, size.x, size.y );
+  }
+  
+  public static void fillRect( final Graphics g, final float x, final float y,
+      final float width, final float height ) {
     final int px = Math.round( x );
     final int py = Math.round( y );
     
@@ -158,9 +228,22 @@ public final class GraphicsUtil {
         Math.round( arcWidth ), Math.round( arcHeight ) );
   }
   
+  public static void fillOval( final Graphics g, final Rectangle2D.Float rect ) {
+    fillOval( g, rect.x, rect.y, rect.width, rect.height );
+  }
+  
+  public static void fillOval( final Graphics g, final Point2D.Float p, final Point2D.Float size ) {
+    fillOval( g, p.x, p.y, size.x, size.y );
+  }
+  
   public static void fillOval( final Graphics g, final Point2D.Float p,
       final float width, final float height ) {
     fillOval( g, p.x, p.y, width, height );
+  }
+  
+  public static void fillOval( final Graphics g, final float x, final float y,
+      final Point2D.Float size ) {
+    fillOval( g, x, y, size.x, size.y );
   }
   
   public static void fillOval( final Graphics g, final float x, final float y,

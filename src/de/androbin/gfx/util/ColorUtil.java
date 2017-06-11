@@ -52,10 +52,10 @@ public final class ColorUtil {
     return new Color( 0xFF000000 | ( r << 16 ) | ( g << 8 ) | ( b << 0 ) );
   }
   
-  public static Color interpolateColor( final Color l, final float p, final Color r ) {
-    final int red = Math.round( inter( l.getRed(), p, r.getRed() ) );
-    final int green = Math.round( inter( l.getGreen(), p, r.getGreen() ) );
-    final int blue = Math.round( inter( l.getBlue(), p, r.getBlue() ) );
+  public static Color interColor( final Color l, final float p, final Color r ) {
+    final float red = inter( l.getRed(), p, r.getRed() );
+    final float green = inter( l.getGreen(), p, r.getGreen() );
+    final float blue = inter( l.getBlue(), p, r.getBlue() );
     
     return new Color( red, green, blue );
   }

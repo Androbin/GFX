@@ -18,32 +18,32 @@ public final class ColorUtil {
     final float q = 1f - f;
     
     switch ( (int) h ) {
-      case 0 :
+      case 0:
         r = 255;
         g = (int) ( f * 255f + 0.5f );
         break;
       
-      case 1 :
+      case 1:
         r = (int) ( q * 255f + 0.5f );
         g = 255;
         break;
       
-      case 2 :
+      case 2:
         g = 255;
         b = (int) ( f * 255f + 0.5f );
         break;
       
-      case 3 :
+      case 3:
         g = (int) ( q * 255f + 0.5f );
         b = 255;
         break;
       
-      case 4 :
+      case 4:
         r = (int) ( f * 255f + 0.5f );
         b = 255;
         break;
       
-      case 5 :
+      case 5:
         r = 255;
         b = (int) ( q * 255f + 0.5f );
         break;

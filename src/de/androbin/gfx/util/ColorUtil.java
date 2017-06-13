@@ -53,9 +53,9 @@ public final class ColorUtil {
   }
   
   public static Color interColor( final Color l, final float p, final Color r ) {
-    final float red = inter( l.getRed(), p, r.getRed() );
-    final float green = inter( l.getGreen(), p, r.getGreen() );
-    final float blue = inter( l.getBlue(), p, r.getBlue() );
+    final float red = inter( l.getRed() / 255f, p, r.getRed() / 255f );
+    final float green = inter( l.getGreen() / 255f, p, r.getGreen() / 255f );
+    final float blue = inter( l.getBlue() / 255f, p, r.getBlue() / 255f );
     
     return new Color( red, green, blue );
   }

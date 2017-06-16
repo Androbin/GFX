@@ -1,7 +1,7 @@
 package de.androbin.gfx;
 
 import static java.awt.event.KeyEvent.*;
-import de.androbin.*;
+import de.androbin.thread.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
@@ -10,7 +10,7 @@ import javax.swing.*;
 public abstract class CustomPane extends JComponent implements Renderable, Runnable {
   private BufferedImage buffer;
   
-  private final ThreadSleeper threadSleeper;
+  private final ThreadSleeper sleeper;
   
   protected long delayMilli;
   protected int delayNano;
@@ -21,7 +21,7 @@ public abstract class CustomPane extends JComponent implements Renderable, Runna
   protected boolean deadly;
   
   public CustomPane() {
-    threadSleeper = new ThreadSleeper();
+    sleeper = new ThreadSleeper();
     
     delayMilli = 20L;
     
@@ -69,7 +69,7 @@ public abstract class CustomPane extends JComponent implements Renderable, Runna
     long lastFrame = System.currentTimeMillis();
     
     while ( running ) {
-      threadSleeper.sleep( delayMilli, delayNano );
+      sleeper.sleep( delayMilli, delayNano );
       final long thisFrame = System.currentTimeMillis();
       
       if ( active ) {
@@ -85,7 +85,7 @@ public abstract class CustomPane extends JComponent implements Renderable, Runna
     if ( deadly ) {
       System.exit( 0 );
     } else {
-      threadSleeper.reset();
+      sleeper.reset();
     }
   }
   

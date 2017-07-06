@@ -52,7 +52,10 @@ public final class GraphicsUtil {
     final int px = Math.round( x );
     final int py = Math.round( y );
     
-    g.drawImage( image, px, py, Math.round( x + width ) - px, Math.round( y + height ) - py, null );
+    final int pw = Math.round( x + width ) - px;
+    final int ph = Math.round( y + height ) - py;
+    
+    g.drawImage( image, px, py, pw, ph, null );
   }
   
   public static void drawLine( final Graphics g, final Line2D.Float line ) {
@@ -91,7 +94,10 @@ public final class GraphicsUtil {
     final int px = Math.round( x );
     final int py = Math.round( y );
     
-    g.drawRect( px, py, Math.round( x + width ) - px, Math.round( y + height ) - py );
+    final int pw = Math.round( x + width ) - px;
+    final int ph = Math.round( y + height ) - py;
+    
+    g.drawRect( px, py, pw, ph );
   }
   
   public static void drawRoundRect( final Graphics g, final RoundRectangle2D.Float rect ) {
@@ -103,8 +109,10 @@ public final class GraphicsUtil {
     final int px = Math.round( x );
     final int py = Math.round( y );
     
-    g.drawRoundRect( px, py, Math.round( x + width ) - px, Math.round( y + height ) - py,
-        Math.round( arcWidth ), Math.round( arcHeight ) );
+    final int pw = Math.round( x + width ) - px;
+    final int ph = Math.round( y + height ) - py;
+    
+    g.drawRoundRect( px, py, pw, ph, Math.round( arcWidth ), Math.round( arcHeight ) );
   }
   
   public static void drawOval( final Graphics g, final Rectangle2D.Float rect ) {
@@ -130,7 +138,10 @@ public final class GraphicsUtil {
     final int px = Math.round( x - width );
     final int py = Math.round( y - height );
     
-    g.drawOval( px, py, Math.round( x + width ) - px, Math.round( y + height ) - py );
+    final int pw = Math.round( x + width ) - px;
+    final int ph = Math.round( y + height ) - py;
+    
+    g.drawOval( px, py, pw, ph );
   }
   
   public static void fill3DRect( final Graphics g, final Rectangle2D.Float rect,
@@ -147,17 +158,17 @@ public final class GraphicsUtil {
     
     g.setColor( raised ? c : darker );
     
-    fillRect( g, x + thickness, y + thickness, width - 2 * thickness, height - 2 * thickness );
+    fillRect( g, x + thickness, y + thickness, width - thickness * 2f, height - thickness * 2f );
     fillDiagonal( g, x + width - thickness, y, thickness );
     fillDiagonal( g, x, y + height - thickness, thickness );
     
     g.setColor( raised ? brighter : darker );
     fillRect( g, x, y, thickness, height - thickness );
-    fillRect( g, x + thickness, y, width - 2 * thickness, thickness );
+    fillRect( g, x + thickness, y, width - thickness * 2f, thickness );
     
     g.setColor( raised ? darker : brighter );
     fillRect( g, x + thickness, y + height - thickness, width - thickness, thickness );
-    fillRect( g, x + width - thickness, y + thickness, thickness, height - 2 * thickness );
+    fillRect( g, x + width - thickness, y + thickness, thickness, height - thickness * 2f );
   }
   
   public static void fillCircle( final Graphics g, final Point2D.Float p, final float r ) {
@@ -212,7 +223,10 @@ public final class GraphicsUtil {
     final int px = Math.round( x );
     final int py = Math.round( y );
     
-    g.fillRect( px, py, Math.round( x + width ) - px, Math.round( y + height ) - py );
+    final int pw = Math.round( x + width ) - px;
+    final int ph = Math.round( y + height ) - py;
+    
+    g.fillRect( px, py, pw, ph );
   }
   
   public static void fillRoundRect( final Graphics g, final RoundRectangle2D.Float rect ) {
@@ -224,8 +238,10 @@ public final class GraphicsUtil {
     final int px = Math.round( x );
     final int py = Math.round( y );
     
-    g.fillRoundRect( px, py, Math.round( x + width ) - px, Math.round( y + height ) - py,
-        Math.round( arcWidth ), Math.round( arcHeight ) );
+    final int pw = Math.round( x + width ) - px;
+    final int ph = Math.round( y + height ) - py;
+    
+    g.fillRoundRect( px, py, pw, ph, Math.round( arcWidth ), Math.round( arcHeight ) );
   }
   
   public static void fillOval( final Graphics g, final Rectangle2D.Float rect ) {
@@ -251,6 +267,9 @@ public final class GraphicsUtil {
     final int px = Math.round( x - width );
     final int py = Math.round( y - height );
     
-    g.fillOval( px, py, Math.round( x + width ) - px, Math.round( y + height ) - py );
+    final int pw = Math.round( x + width ) - px;
+    final int ph = Math.round( y + height ) - py;
+    
+    g.fillOval( px, py, pw, ph );
   }
 }

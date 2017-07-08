@@ -21,22 +21,20 @@ public abstract class CustomPane extends JComponent implements Renderable, Runna
   protected boolean deadly;
   
   public CustomPane() {
+    this( 60 );
+  }
+  
+  public CustomPane( final int fps ) {
     sleeper = new ThreadSleeper();
     
-    delayMilli = 20L;
+    delayMilli = 1000L / fps;
+    delayNano = (int) ( 1000000000L / fps - delayMilli * 1000000L );
     
     active = true;
     deadly = true;
     
     setFocusable( true );
     setIgnoreRepaint( true );
-  }
-  
-  public CustomPane( final int fps ) {
-    this();
-    
-    delayMilli = 1000L / fps;
-    delayNano = (int) ( 1000000000L / fps - delayMilli * 1000000L );
   }
   
   protected abstract void destroy();

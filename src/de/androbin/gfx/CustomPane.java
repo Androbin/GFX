@@ -13,7 +13,7 @@ public abstract class CustomPane extends JComponent implements Renderable, Runna
   private final ThreadSleeper sleeper;
   
   protected long delayMilli;
-  protected int delayNano;
+  protected int delayMikro;
   
   protected volatile boolean active;
   protected volatile boolean running;
@@ -28,7 +28,7 @@ public abstract class CustomPane extends JComponent implements Renderable, Runna
     sleeper = new ThreadSleeper();
     
     delayMilli = 1000L / fps;
-    delayNano = (int) ( 1000000000L / fps - 1000000L * delayMilli );
+    delayMikro = (int) ( 1000000L / fps - 1000L * delayMilli );
     
     active = true;
     deadly = true;
@@ -65,38 +65,38 @@ public abstract class CustomPane extends JComponent implements Renderable, Runna
     running = true;
     
     long deltaMilli = delayMilli;
-    int deltaNano = delayNano;
+    int deltaMikro = delayMikro;
     
     while ( running ) {
       if ( active ) {
         final long before = System.currentTimeMillis();
         
-        update( deltaMilli / 1000f + deltaNano / 1000000000f );
+        update( deltaMilli / 1000f + deltaMikro / 1000000f );
         render();
         
         final long after = System.currentTimeMillis();
         final long diff = after - before;
         
         final long sleepMilli;
-        final int sleepNano;
+        final int sleepMikro;
         
         if ( diff <= delayMilli ) {
           sleepMilli = delayMilli - diff;
-          sleepNano = delayNano;
+          sleepMikro = delayMikro;
         } else {
           sleepMilli = 0L;
-          sleepNano = 0;
+          sleepMikro = 0;
         }
         
-        sleeper.sleep( sleepMilli, sleepNano );
+        sleeper.sleepMikro( sleepMilli, sleepMikro );
         
         deltaMilli = sleepMilli + diff;
-        deltaNano = sleepNano;
+        deltaMikro = sleepMikro;
       } else {
-        sleeper.sleep( delayMilli, delayNano );
+        sleeper.sleepMikro( delayMilli, delayMikro );
         
         deltaMilli = delayMilli;
-        deltaNano = delayNano;
+        deltaMikro = delayMikro;
       }
     }
     

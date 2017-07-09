@@ -28,7 +28,7 @@ public abstract class CustomPane extends JComponent implements Renderable, Runna
     sleeper = new ThreadSleeper();
     
     delayMilli = 1000L / fps;
-    delayNano = (int) ( 1000000000L / fps - delayMilli * 1000000L );
+    delayNano = (int) ( 1000000000L / fps - 1000000L * delayMilli );
     
     active = true;
     deadly = true;
@@ -64,18 +64,40 @@ public abstract class CustomPane extends JComponent implements Renderable, Runna
     
     running = true;
     
-    long lastFrame = System.currentTimeMillis();
+    long deltaMilli = delayMilli;
+    int deltaNano = delayNano;
     
     while ( running ) {
-      sleeper.sleep( delayMilli, delayNano );
-      final long thisFrame = System.currentTimeMillis();
-      
       if ( active ) {
-        update( ( thisFrame - lastFrame ) / 1000f );
+        final long before = System.currentTimeMillis();
+        
+        update( deltaMilli / 1000f + deltaNano / 1000000000f );
         render();
+        
+        final long after = System.currentTimeMillis();
+        final long diff = after - before;
+        
+        final long sleepMilli;
+        final int sleepNano;
+        
+        if ( diff <= delayMilli ) {
+          sleepMilli = delayMilli - diff;
+          sleepNano = delayNano;
+        } else {
+          sleepMilli = 0L;
+          sleepNano = 0;
+        }
+        
+        sleeper.sleep( sleepMilli, sleepNano );
+        
+        deltaMilli = sleepMilli + diff;
+        deltaNano = sleepNano;
+      } else {
+        sleeper.sleep( delayMilli, delayNano );
+        
+        deltaMilli = delayMilli;
+        deltaNano = delayNano;
       }
-      
-      lastFrame = thisFrame;
     }
     
     destroy();

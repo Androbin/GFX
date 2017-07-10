@@ -108,7 +108,7 @@ public abstract class CustomPane extends JComponent implements Renderable, Runna
     }
   }
   
-  public final boolean render() {
+  private final boolean render() {
     return ( buffer = render( this, buffer ) ) != null;
   }
   
@@ -117,7 +117,7 @@ public abstract class CustomPane extends JComponent implements Renderable, Runna
     delayMikro = ( 1000000 / fps ) % 1000;
   }
   
-  protected final void start( final String name ) {
+  public final void start( final String name ) {
     new Thread( this, name ).start();
   }
   

@@ -27,8 +27,7 @@ public abstract class CustomPane extends JComponent implements Renderable, Runna
   public CustomPane( final int fps ) {
     sleeper = new ThreadSleeper();
     
-    delayMilli = 1000L / fps;
-    delayMikro = (int) ( 1000000L / fps - 1000L * delayMilli );
+    setFPS( fps );
     
     active = true;
     deadly = true;
@@ -111,6 +110,11 @@ public abstract class CustomPane extends JComponent implements Renderable, Runna
   
   public final boolean render() {
     return ( buffer = render( this, buffer ) ) != null;
+  }
+  
+  public final void setFPS( final int fps ) {
+    delayMilli = 1000L / fps;
+    delayMikro = ( 1000000 / fps ) % 1000;
   }
   
   protected final void start( final String name ) {

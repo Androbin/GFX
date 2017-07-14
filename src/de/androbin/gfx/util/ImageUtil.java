@@ -6,9 +6,14 @@ import java.awt.image.*;
 import java.io.*;
 import java.net.*;
 import javax.imageio.*;
+import javax.swing.*;
 
 public final class ImageUtil {
   private ImageUtil() {
+  }
+  
+  public static ImageIcon loadIcon( final String path, final int size ) {
+    return new ImageIcon( loadImage( path ).getScaledInstance( size, size, Image.SCALE_SMOOTH ) );
   }
   
   public static BufferedImage loadImage( final File file ) {

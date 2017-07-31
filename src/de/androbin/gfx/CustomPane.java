@@ -5,10 +5,11 @@ import de.androbin.thread.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
+import javafx.util.*;
 import javax.swing.*;
 
 public abstract class CustomPane extends JComponent implements Renderable, Runnable {
-  private BufferedImage buffer;
+  private Pair<BufferedImage, Graphics2D> buffer;
   
   private final ThreadSleeper sleeper;
   

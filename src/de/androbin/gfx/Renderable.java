@@ -2,6 +2,7 @@ package de.androbin.gfx;
 
 import java.awt.*;
 import java.awt.image.*;
+import javafx.util.*;
 import javax.swing.*;
 
 public interface Renderable {
@@ -12,27 +13,40 @@ public interface Renderable {
     return render( comp, null ) != null;
   }
   
-  default BufferedImage render( final JComponent comp, final BufferedImage buffer ) {
+  default Pair<BufferedImage, Graphics2D> render( final JComponent comp,
+      final Pair<BufferedImage, Graphics2D> buffer0 ) {
     if ( GraphicsEnvironment.isHeadless() || comp.getWidth() <= 0 || comp.getHeight() <= 0 ) {
       return null;
     }
     
-    final BufferedImage buffer_ = buffer != null
-        && buffer.getWidth() == comp.getWidth()
-        && buffer.getHeight() == comp.getHeight()
-            ? buffer
-            : new BufferedImage( comp.getWidth(), comp.getHeight(), BufferedImage.TYPE_INT_RGB );
+    Pair<BufferedImage, Graphics2D> buffer = buffer0;
     
-    render( buffer_.createGraphics() );
+    if ( buffer != null && !suitable( buffer.getKey(), comp ) ) {
+      buffer.getValue().dispose();
+      buffer = null;
+    }
+    
+    if ( buffer == null ) {
+      final BufferedImage image = new BufferedImage(
+          comp.getWidth(), comp.getHeight(), BufferedImage.TYPE_INT_RGB );
+      buffer = new Pair<>( image, image.createGraphics() );
+    }
+    
+    render( buffer.getValue() );
     
     final Graphics g = comp.getGraphics();
     
     if ( g != null ) {
-      g.drawImage( buffer_, 0, 0, comp );
+      g.drawImage( buffer.getKey(), 0, 0, comp );
       Toolkit.getDefaultToolkit().sync();
       g.dispose();
     }
     
-    return buffer_;
+    return buffer;
+  }
+  
+  static boolean suitable( final BufferedImage buffer, final JComponent comp ) {
+    return buffer.getWidth() == comp.getWidth()
+        && buffer.getHeight() == comp.getHeight();
   }
 }

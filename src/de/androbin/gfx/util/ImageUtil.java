@@ -1,7 +1,6 @@
 package de.androbin.gfx.util;
 
 import java.awt.*;
-import java.awt.geom.*;
 import java.awt.image.*;
 import java.io.*;
 import java.net.*;
@@ -56,11 +55,11 @@ public final class ImageUtil {
       return null;
     }
     
-    final BufferedImage rotated = new BufferedImage( src.getWidth(), src.getHeight(),
-        src.getType() );
+    final BufferedImage rotated = new BufferedImage(
+        src.getWidth(), src.getHeight(), src.getType() );
     final Graphics2D g = rotated.createGraphics();
     
-    g.setTransform( AffineTransform.getRotateInstance( theta, anchorx, anchory ) );
+    g.rotate( theta, anchorx, anchory );
     g.drawImage( src, 0, 0, null );
     
     return rotated;

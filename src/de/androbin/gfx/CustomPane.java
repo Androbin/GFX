@@ -1,53 +1,16 @@
 package de.androbin.gfx;
 
-import static java.awt.event.KeyEvent.*;
-import de.androbin.thread.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.*;
 import javafx.util.*;
 import javax.swing.*;
 
-public abstract class CustomPane extends JComponent implements Renderable, Runnable {
+public abstract class CustomPane extends JComponent {
   private Pair<BufferedImage, Graphics2D> buffer;
   
-  private final ThreadSleeper sleeper;
-  
-  protected int delayMilli;
-  protected int delayMikro;
-  
-  protected volatile boolean active;
-  protected volatile boolean running;
-  
-  protected boolean deadly;
-  
   public CustomPane() {
-    this( 60 );
-  }
-  
-  public CustomPane( final int fps ) {
-    sleeper = new ThreadSleeper();
-    
-    setFPS( fps );
-    
-    active = true;
-    deadly = true;
-    
     setFocusable( true );
     setIgnoreRepaint( true );
-  }
-  
-  protected abstract void destroy();
-  
-  public final void exitOnEscape() {
-    addKeyListener( new KeyAdapter() {
-      @ Override
-      public void keyPressed( final KeyEvent event ) {
-        if ( event.getKeyCode() == VK_ESCAPE ) {
-          running = false;
-        }
-      }
-    } );
   }
   
   @ Override
@@ -56,71 +19,46 @@ public abstract class CustomPane extends JComponent implements Renderable, Runna
     render( (Graphics2D) g );
   }
   
-  @ Override
-  public final void run() {
-    if ( running ) {
-      return;
-    }
-    
-    running = true;
-    
-    int deltaMilli = delayMilli;
-    int deltaMikro = delayMikro;
-    
-    while ( running ) {
-      if ( active ) {
-        final long before = System.currentTimeMillis();
-        
-        update( deltaMilli / 1000f + deltaMikro / 1000000f );
-        render();
-        
-        final long after = System.currentTimeMillis();
-        final int diff = (int) ( after - before );
-        
-        final int sleepMilli;
-        final int sleepMikro;
-        
-        if ( diff <= delayMilli ) {
-          sleepMilli = delayMilli - diff;
-          sleepMikro = delayMikro;
-        } else {
-          sleepMilli = 0;
-          sleepMikro = 0;
-        }
-        
-        sleeper.sleepMikro( sleepMilli, sleepMikro );
-        
-        deltaMilli = sleepMilli + diff;
-        deltaMikro = sleepMikro;
-      } else {
-        sleeper.sleepMikro( delayMilli, delayMikro );
-        
-        deltaMilli = delayMilli;
-        deltaMikro = delayMikro;
-      }
-    }
-    
-    destroy();
-    
-    if ( deadly ) {
-      System.exit( 0 );
-    } else {
-      sleeper.reset();
-    }
-  }
-  
-  private final boolean render() {
+  public final boolean render() {
     return ( buffer = render( this, buffer ) ) != null;
   }
   
-  public final void setFPS( final int fps ) {
-    delayMilli = 1000 / fps;
-    delayMikro = ( 1000000 / fps ) % 1000;
+  public abstract void render( final Graphics2D g );
+  
+  private Pair<BufferedImage, Graphics2D> render( final JComponent comp,
+      final Pair<BufferedImage, Graphics2D> buffer0 ) {
+    if ( GraphicsEnvironment.isHeadless() || comp.getWidth() <= 0 || comp.getHeight() <= 0 ) {
+      return null;
+    }
+    
+    Pair<BufferedImage, Graphics2D> buffer = buffer0;
+    
+    if ( buffer != null && !suitable( buffer.getKey(), comp ) ) {
+      buffer.getValue().dispose();
+      buffer = null;
+    }
+    
+    if ( buffer == null ) {
+      final BufferedImage image = new BufferedImage(
+          comp.getWidth(), comp.getHeight(), BufferedImage.TYPE_INT_RGB );
+      buffer = new Pair<>( image, image.createGraphics() );
+    }
+    
+    render( buffer.getValue() );
+    
+    final Graphics g = comp.getGraphics();
+    
+    if ( g != null ) {
+      g.drawImage( buffer.getKey(), 0, 0, comp );
+      Toolkit.getDefaultToolkit().sync();
+      g.dispose();
+    }
+    
+    return buffer;
   }
   
-  public final void start( final String name ) {
-    new Thread( this, name ).start();
+  private static boolean suitable( final BufferedImage buffer, final JComponent comp ) {
+    return buffer.getWidth() == comp.getWidth()
+        && buffer.getHeight() == comp.getHeight();
   }
-  
-  protected abstract void update( float delta );
 }

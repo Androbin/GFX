@@ -1,5 +1,6 @@
 package de.androbin.gfx.util;
 
+import de.androbin.io.*;
 import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
@@ -28,7 +29,7 @@ public final class ImageUtil {
   }
   
   public static BufferedImage loadImage( final String path ) {
-    final URL res = ClassLoader.getSystemResource( "gfx/" + path );
+    final URL res = DynamicClassLoader.get().getResource( "gfx/" + path );
     
     if ( res == null ) {
       return null;

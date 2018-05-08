@@ -12,8 +12,14 @@ public final class ImageUtil {
   private ImageUtil() {
   }
   
+  private static int getType( final BufferedImage src ) {
+    return src.getTransparency() == Transparency.OPAQUE
+        ? BufferedImage.TYPE_INT_RGB
+        : BufferedImage.TYPE_INT_ARGB;
+  }
+  
   public static ImageIcon loadIcon( final String path, final int size ) {
-    return new ImageIcon( loadImage( path ).getScaledInstance( size, size, Image.SCALE_SMOOTH ) );
+    return new ImageIcon( scaleImage( loadImage( path ), size, size ) );
   }
   
   public static BufferedImage loadImage( final File file ) {
@@ -57,11 +63,12 @@ public final class ImageUtil {
     }
     
     final BufferedImage rotated = new BufferedImage(
-        src.getWidth(), src.getHeight(), src.getType() );
+        src.getWidth(), src.getHeight(), getType( src ) );
     final Graphics2D g = rotated.createGraphics();
     
     g.rotate( theta, anchorx, anchory );
     g.drawImage( src, 0, 0, null );
+    g.dispose();
     
     return rotated;
   }
@@ -77,5 +84,20 @@ public final class ImageUtil {
     } catch ( final IOException e ) {
       return false;
     }
+  }
+  
+  public static BufferedImage scaleImage( final BufferedImage src, final Dimension size ) {
+    return scaleImage( src, size.width, size.height );
+  }
+  
+  public static BufferedImage scaleImage( final BufferedImage src,
+      final int width, final int height ) {
+    final BufferedImage scaled = new BufferedImage( width, height, getType( src ) );
+    final Graphics2D g = scaled.createGraphics();
+    
+    g.drawImage( src, 0, 0, width, height, null );
+    g.dispose();
+    
+    return scaled;
   }
 }

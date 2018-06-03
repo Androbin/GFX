@@ -2,11 +2,10 @@ package de.androbin.gfx;
 
 import java.awt.*;
 import java.awt.image.*;
-import javafx.util.*;
 import javax.swing.*;
 
 public abstract class CustomPane extends JComponent {
-  private Pair<BufferedImage, Graphics2D> buffer;
+  private BufferedImage buffer;
   
   public CustomPane() {
     setFocusable( true );
@@ -23,33 +22,27 @@ public abstract class CustomPane extends JComponent {
     return ( buffer = render( this, buffer ) ) != null;
   }
   
-  public abstract void render( final Graphics2D g );
+  public abstract void render( Graphics2D g );
   
-  private Pair<BufferedImage, Graphics2D> render( final JComponent comp,
-      final Pair<BufferedImage, Graphics2D> buffer0 ) {
+  private BufferedImage render( final JComponent comp, final BufferedImage buffer0 ) {
     if ( GraphicsEnvironment.isHeadless() || comp.getWidth() <= 0 || comp.getHeight() <= 0 ) {
       return null;
     }
     
-    Pair<BufferedImage, Graphics2D> buffer = buffer0;
+    BufferedImage buffer = buffer0;
     
-    if ( buffer != null && !suitable( buffer.getKey(), comp ) ) {
-      buffer.getValue().dispose();
-      buffer = null;
+    if ( buffer == null || !suitable( buffer, comp ) ) {
+      buffer = new BufferedImage( comp.getWidth(), comp.getHeight(), BufferedImage.TYPE_INT_RGB );
     }
     
-    if ( buffer == null ) {
-      final BufferedImage image = new BufferedImage(
-          comp.getWidth(), comp.getHeight(), BufferedImage.TYPE_INT_RGB );
-      buffer = new Pair<>( image, image.createGraphics() );
-    }
-    
-    render( buffer.getValue() );
+    final Graphics2D g2 = buffer.createGraphics();
+    render( g2 );
+    g2.dispose();
     
     final Graphics g = comp.getGraphics();
     
     if ( g != null ) {
-      g.drawImage( buffer.getKey(), 0, 0, comp );
+      g.drawImage( buffer, 0, 0, null );
       Toolkit.getDefaultToolkit().sync();
       g.dispose();
     }

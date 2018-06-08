@@ -5,7 +5,7 @@ import java.awt.image.*;
 import javax.swing.*;
 
 public abstract class CustomPane extends JComponent {
-  private BufferedImage buffer;
+  private VolatileImage buffer;
   
   public CustomPane() {
     setFocusable( true );
@@ -19,27 +19,27 @@ public abstract class CustomPane extends JComponent {
   }
   
   public final boolean render() {
-    return ( buffer = render( this, buffer ) ) != null;
+    return ( buffer = render( buffer ) ) != null;
   }
   
   public abstract void render( Graphics2D g );
   
-  private BufferedImage render( final JComponent comp, final BufferedImage buffer0 ) {
-    if ( GraphicsEnvironment.isHeadless() || comp.getWidth() <= 0 || comp.getHeight() <= 0 ) {
+  private VolatileImage render( final VolatileImage buffer0 ) {
+    if ( GraphicsEnvironment.isHeadless() || getWidth() <= 0 || getHeight() <= 0 ) {
       return null;
     }
     
-    BufferedImage buffer = buffer0;
+    VolatileImage buffer = buffer0;
     
-    if ( buffer == null || !suitable( buffer, comp ) ) {
-      buffer = new BufferedImage( comp.getWidth(), comp.getHeight(), BufferedImage.TYPE_INT_RGB );
+    if ( buffer == null || !suitable( buffer ) ) {
+      buffer = createVolatileImage( getWidth(), getHeight() );
     }
     
     final Graphics2D g2 = buffer.createGraphics();
     render( g2 );
     g2.dispose();
     
-    final Graphics g = comp.getGraphics();
+    final Graphics g = getGraphics();
     
     if ( g != null ) {
       g.drawImage( buffer, 0, 0, null );
@@ -50,8 +50,8 @@ public abstract class CustomPane extends JComponent {
     return buffer;
   }
   
-  private static boolean suitable( final BufferedImage buffer, final JComponent comp ) {
-    return buffer.getWidth() == comp.getWidth()
-        && buffer.getHeight() == comp.getHeight();
+  private boolean suitable( final VolatileImage buffer ) {
+    return buffer.getWidth() == getWidth()
+        && buffer.getHeight() == getHeight();
   }
 }

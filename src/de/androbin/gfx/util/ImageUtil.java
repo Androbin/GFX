@@ -4,7 +4,7 @@ import de.androbin.io.*;
 import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
-import java.net.*;
+import java.nio.file.*;
 import javax.imageio.*;
 import javax.swing.*;
 
@@ -22,27 +22,17 @@ public final class ImageUtil {
     return new ImageIcon( scaleImage( loadImage( path ), size, size ) );
   }
   
-  public static BufferedImage loadImage( final File file ) {
+  public static BufferedImage loadImage( final String path ) {
+    return loadImage( DynamicClassLoader.getPath( "gfx/" + path ) );
+  }
+  
+  public static BufferedImage loadImage( final Path file ) {
     if ( file == null ) {
       return null;
     }
     
     try {
-      return ImageIO.read( file );
-    } catch ( final IOException e ) {
-      return null;
-    }
-  }
-  
-  public static BufferedImage loadImage( final String path ) {
-    final URL res = DynamicClassLoader.get().getResource( "gfx/" + path );
-    
-    if ( res == null ) {
-      return null;
-    }
-    
-    try {
-      return ImageIO.read( res );
+      return ImageIO.read( Files.newInputStream( file ) );
     } catch ( final IOException e ) {
       return null;
     }
